@@ -52,12 +52,12 @@ function getWriteType(options) {
   }
 
   function number(encoder, value) {
-    var ivalue = (value | 0) >>> 0;
+    var ivalue = value | 0;
     var type;
     if (value !== ivalue) {
       // float 64 -- 0xcb
-        //Исправлено! Float нам не нужен. Нам нужен Uint64
-      type = 0xcf;
+        //Int64
+      type = 0xd3;
       token[type](encoder, value);
       return;
     } else if (-0x20 <= ivalue && ivalue <= 0x7F) {
