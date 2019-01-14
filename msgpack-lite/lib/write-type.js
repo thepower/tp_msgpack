@@ -51,32 +51,28 @@ function getWriteType(options) {
     token[type](encoder, value);
   }
 
-  function number(encoder, value) {
-    var ivalue = value | 0;
-    var type;
-    if (value !== ivalue) {
-      // float 64 -- 0xcb
-        //Int64
-      type = 0xd3;
-      token[type](encoder, value);
-      return;
-    } else if (-0x20 <= ivalue && ivalue <= 0x7F) {
-      // positive fixint -- 0x00 - 0x7f
-      // negative fixint -- 0xe0 - 0xff
-      type = ivalue & 0xFF;
-    } else if (0 <= ivalue) {
-      // uint 8 -- 0xcc
-      // uint 16 -- 0xcd
-      // uint 32 -- 0xce
-      type = (ivalue <= 0xFF) ? 0xcc : (ivalue <= 0xFFFF) ? 0xcd : 0xce;
-    } else {
-      // int 8 -- 0xd0
-      // int 16 -- 0xd1
-      // int 32 -- 0xd2
-      type = (-0x80 <= ivalue) ? 0xd0 : (-0x8000 <= ivalue) ? 0xd1 : 0xd2;
+    function number(encoder, value) {
+        let type;
+        if (Number.isSafeInteger(value)) {
+            if (value >= 0) {
+                if (value <= 0x7F) type = value; // positive fixint -- 0x00 - 0x7F
+                else if (value <= 0xFF) type =  0xCC; // uint 8 -- 0xCC
+                else if (value <= 0xFFFF) type =  0xCD; // uint 16 -- 0xCD
+                else if (value <= 0xFFFFFFFF) type =  0xCE; // uint 32 -- 0xCE
+                else type =  0xCF; // uint 64 -- 0xCF
+            } else {
+                if (value >= -0x20) type = value; // negative fixint -- 0xE0 - 0xFF
+                else if (value >= -0x80) type =  0xD0; // int 8 -- 0xD0
+                else if (value >= -0x8000) type =  0xD1; // int 16 -- 0xD1
+                else if (value >= -0x80000000) type =  0xD2; // int 32 -- 0xD2
+                else type =  0xD3; // int 64 -- 0xD3
+            }
+
+        } else {
+            throw new RangeError('Integer value out of bounds');
+        }
+        token[type](encoder, value);
     }
-    token[type](encoder, ivalue);
-  }
 
   // uint 64 -- 0xcf
   function uint64(encoder, value) {
