@@ -61,7 +61,7 @@ function getWriteType(options) {
                 else if (value <= 0xFFFFFFFF) type =  0xCE; // uint 32 -- 0xCE
                 else type =  0xCF; // uint 64 -- 0xCF
             } else {
-                if (value >= -0x20) type = value; // negative fixint -- 0xE0 - 0xFF
+                if (value >= -0x20) type = value & 0xFF; // negative fixint -- 0xE0 - 0xFF
                 else if (value >= -0x80) type =  0xD0; // int 8 -- 0xD0
                 else if (value >= -0x8000) type =  0xD1; // int 16 -- 0xD1
                 else if (value >= -0x80000000) type =  0xD2; // int 32 -- 0xD2
