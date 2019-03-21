@@ -11,8 +11,6 @@
   "nil": null,
   "true": true,
   "false": false,
-  "float": 0.5,
-  "float-": -0.5,
   "string0": "",
   "string1": "A",
   "string4": "foobarbaz",

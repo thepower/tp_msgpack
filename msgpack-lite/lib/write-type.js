@@ -52,7 +52,10 @@ function getWriteType(options) {
   }
 
     function number(encoder, value) {
-        let type;
+        var type;
+        Number.isSafeInteger = Number.isSafeInteger || function (value) {
+            return Number.isInteger(value) && Math.abs(value) <= Number.MAX_SAFE_INTEGER;
+        };
         if (Number.isSafeInteger(value)) {
             if (value >= 0) {
                 if (value <= 0x7F) type = value; // positive fixint -- 0x00 - 0x7F

@@ -64,7 +64,7 @@ describe(TITLE, function() {
     assert.ok(decoded instanceof RegExp);
   });
 
-  it("Number", function() {
+  /*it("Number", function() {
     var source = new Number(123.456);
     var encoded = msgpack.encode(source);
     assert.equal(encoded[0], 0xC7); // ext 8
@@ -73,7 +73,7 @@ describe(TITLE, function() {
     var decoded = msgpack.decode(encoded);
     assert.equal(decoded - 0, source - 0);
     assert.ok(decoded instanceof Number);
-  });
+  });*/
 
   it("String", function() {
     var source = new String("qux");
